@@ -9,12 +9,12 @@ public class HelloController {
     @Autowired
     HelloService helloService;
 
-    @RequestMapping("/")
+    @GetMapping(value="/")
     public String index() {
         return "Greetings from Spring Boot.!";
     }
 
-    @RequestMapping("/hello")
+    @GetMapping(value="/hello")
     public String hello() {
         return this.helloService.sayHello("Bob");
     }
