@@ -10,7 +10,7 @@
 
 資料庫：
 
-```
+```sql
 CREATE TABLE `student` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
@@ -20,3 +20,6 @@ CREATE TABLE `student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
+不完善的地方 :
+- [ ] Interceptor 到 Controller 的資料傳遞
+- [ ] Swagger 的 Example 目前版本無法正常顯示 (等待 3.0 穩定版再看看)
