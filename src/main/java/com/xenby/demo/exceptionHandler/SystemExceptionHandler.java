@@ -1,6 +1,8 @@
 package com.xenby.demo.exceptionHandler;
 
+import com.xenby.demo.exception.HttpException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,5 +27,14 @@ public class SystemExceptionHandler {
         });
 
         return errors;
+    }
+
+    @ResponseBody
+    @ExceptionHandler(HttpException.class)
+    public ResponseEntity<Map<String, String>> handleHttpExceptions(HttpException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
+
+        return new ResponseEntity<Map<String, String>>(errors, ex.getStatusCode());
     }
 }
