@@ -3,6 +3,8 @@ package com.xenby.demo.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.xenby.demo.exception.ForbiddenException;
+import com.xenby.demo.exception.UnauthorizedException;
 import com.xenby.demo.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -21,22 +23,14 @@ public class JwtInterceptor implements HandlerInterceptor {
         // 未提供 token
         final String requestTokenHeader = request.getHeader("Authorization");
         if (requestTokenHeader == null) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("not login");
-            response.getWriter().flush();
-            response.getWriter().close();
-            return false;
+            throw new ForbiddenException("not login");
         }
 
         // 提供的 token 無效
         try {
             jwtService.validateToken(requestTokenHeader.substring(7));
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("token not validated");
-            response.getWriter().flush();
-            response.getWriter().close();
-            return false;
+            throw new UnauthorizedException("token not validated");
         }
 
         return true;
