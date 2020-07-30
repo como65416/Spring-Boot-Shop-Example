@@ -1,8 +1,12 @@
 package com.xenby.demo.form;
 
+import javax.validation.constraints.NotBlank;
+
 public class LoginForm {
+    @NotBlank(message = "Name is required")
     private String username;
 
+    @NotBlank(message = "Password is required")
     private String password;
 
     public String getUsername() {

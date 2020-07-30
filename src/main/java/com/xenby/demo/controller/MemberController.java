@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class MemberController {
             @ApiResponse(code = 401, message = "登入失敗")
     })
     @PostMapping(value="/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginForm loginForm) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (!loginForm.getUsername().equals("user") || !loginForm.getPassword().equals("1234")) {
             map.put("message", "Username or Password not validated");
