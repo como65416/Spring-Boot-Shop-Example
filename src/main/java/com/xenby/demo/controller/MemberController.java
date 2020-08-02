@@ -2,6 +2,7 @@ package com.xenby.demo.controller;
 
 import com.xenby.demo.exception.UnauthorizedException;
 import com.xenby.demo.form.LoginForm;
+import com.xenby.demo.model.JwtClaimsData;
 import com.xenby.demo.service.JwtService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,14 @@ public class MemberController {
     @PostMapping(value="/login")
     public Map<String, Object> login(@Valid @RequestBody LoginForm loginForm) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (!loginForm.getUsername().equals("user") || !loginForm.getPassword().equals("1234")) {
+        if (!loginForm.getPassword().equals("1234")) {
             throw new UnauthorizedException("Username or Password not validated");
         }
 
-        Map<String, Object> data = new HashMap<String, Object>();
-        map.put("token", jwtService.generateToken(data));
+        JwtClaimsData jwtClaimsData = new JwtClaimsData();
+        jwtClaimsData.setUsername(loginForm.getUsername());
+        jwtClaimsData.setRole(loginForm.getUsername().equals("admin") ? "admin" : "member");
+        map.put("token", jwtService.generateToken(jwtClaimsData));
 
         return map;
     }
