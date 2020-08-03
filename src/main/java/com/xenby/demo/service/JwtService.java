@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.xenby.demo.model.JwtClaimsData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,12 @@ public class JwtService {
     @Value("${jwt.key}")
     private String jwtKey;
 
-    public String generateToken(Map<String, Object> data) {
+    public String generateToken(JwtClaimsData jwtClaimsData) {
         Algorithm algorithm = Algorithm.HMAC256(this.jwtKey);
         JWTCreator.Builder builder = JWT.create();
 
-        for (String key : data.keySet()) {
-            builder = builder.withClaim(key, (String) data.get(key));
-        }
+        builder = builder.withClaim("username", jwtClaimsData.getUsername());
+        builder = builder.withClaim("role", jwtClaimsData.getRole());
 
         builder = builder.withClaim("exp", (new Date()).getTime() + 3600);
         String token = builder.sign(algorithm);
@@ -31,16 +31,15 @@ public class JwtService {
         return token;
     }
 
-    public Map<String, Object> validateToken(String token) {
+    public JwtClaimsData validateToken(String token) {
         Algorithm algorithm = Algorithm.HMAC256(this.jwtKey);
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT jwt = verifier.verify(token);
 
-        Map<String, Object> data = new HashMap<String, Object>();
-        for (String key : jwt.getClaims().keySet()) {
-            data.put(key, jwt.getClaims().get(key));
-        }
+        JwtClaimsData jwtClaimsData = new JwtClaimsData();
+        jwtClaimsData.setUsername(jwt.getClaim("username").asString());
+        jwtClaimsData.setRole(jwt.getClaim("role").asString());
 
-        return data;
+        return jwtClaimsData;
     }
 }
