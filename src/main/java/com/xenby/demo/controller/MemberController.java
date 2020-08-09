@@ -9,6 +9,7 @@ import com.xenby.demo.service.JwtService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +61,11 @@ public class MemberController {
         map.put("companyId", tokenUserDetails.getCompanyId());
 
         return map;
+    }
+
+    @GetMapping(value="/only-manager-view")
+    public String onlyManagerView()
+    {
+        return "hello, Manager!";
     }
 }
