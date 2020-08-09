@@ -2,14 +2,14 @@ package com.xenby.demo.controller;
 
 import com.xenby.demo.exception.UnauthorizedException;
 import com.xenby.demo.form.LoginForm;
-import com.xenby.demo.model.JwtClaimsData;
+import com.xenby.demo.model.TokenUserDetails;
 import com.xenby.demo.model.User;
 import com.xenby.demo.repository.UserRepository;
 import com.xenby.demo.service.JwtService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,10 +41,23 @@ public class MemberController {
             throw new UnauthorizedException("Username or Password not validated");
         }
 
-        JwtClaimsData jwtClaimsData = new JwtClaimsData();
-        jwtClaimsData.setUsername(user.getUsername());
-        jwtClaimsData.setRole(user.getRole());
-        map.put("token", jwtService.generateToken(jwtClaimsData));
+        TokenUserDetails tokenUserDetails = new TokenUserDetails();
+        tokenUserDetails.setUsername(user.getUsername());
+        tokenUserDetails.setRole(user.getRole());
+        tokenUserDetails.setCompanyId(user.getCompanyId());
+        map.put("token", jwtService.generateToken(tokenUserDetails));
+
+        return map;
+    }
+
+    @GetMapping(value="/user-info")
+    public Map<String, Object> info()
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        TokenUserDetails tokenUserDetails = (TokenUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        map.put("username", tokenUserDetails.getUsername());
+        map.put("role", tokenUserDetails.getRole());
+        map.put("companyId", tokenUserDetails.getCompanyId());
 
         return map;
     }
