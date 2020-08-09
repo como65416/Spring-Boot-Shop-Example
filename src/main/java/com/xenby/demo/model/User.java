@@ -23,6 +23,9 @@ public class User implements Serializable {
     @Column(name = "role", nullable = false)
     private String role;
 
+    @Column(name = "companyId", nullable = false)
+    private Integer companyId;
+
     public Integer getId() {
         return id;
     }
@@ -53,5 +56,13 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 }
