@@ -1,4 +1,4 @@
-package com.xenby.demo.exceptionHandler;
+package com.xenby.demo.exception;
 
 import com.xenby.demo.exception.HttpException;
 import org.springframework.http.HttpStatus;
@@ -38,3 +38,4 @@ public class SystemExceptionHandler {
         return new ResponseEntity<Map<String, String>>(errors, ex.getStatusCode());
     }
 }
+
