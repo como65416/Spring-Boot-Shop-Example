@@ -64,6 +64,7 @@ public class MemberController {
     }
 
     @GetMapping(value="/only-manager-view")
+    @PreAuthorize("hasRole('MANAGER')")
     public String onlyManagerView()
     {
         return "hello, Manager!";
