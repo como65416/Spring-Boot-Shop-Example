@@ -5,18 +5,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.xenby.demo.exception.ForbiddenException;
 import com.xenby.demo.exception.UnauthorizedException;
-import com.xenby.demo.model.JwtClaimsData;
+import com.xenby.demo.model.TokenUserDetails;
 import com.xenby.demo.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
@@ -34,10 +33,10 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         // 提供的 token 無效
         try {
-            JwtClaimsData jwtClaimsData = jwtService.validateToken(requestTokenHeader.substring(7));
+            TokenUserDetails tokenUserDetails = jwtService.loadUserDetailByToken(requestTokenHeader.substring(7));
             // 紀錄登入資料
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(jwtClaimsData, null, new ArrayList<>());
+            PreAuthenticatedAuthenticationToken authentication =
+                    new PreAuthenticatedAuthenticationToken(tokenUserDetails, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             throw new UnauthorizedException("token not validated");
