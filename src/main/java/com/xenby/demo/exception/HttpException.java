@@ -2,7 +2,9 @@ package com.xenby.demo.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class HttpException extends Exception {
+import javax.servlet.ServletException;
+
+public class HttpException extends ServletException {
     private HttpStatus statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
 
     private String message = "";
