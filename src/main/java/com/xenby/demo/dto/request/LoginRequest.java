@@ -1,8 +1,8 @@
-package com.xenby.demo.form;
+package com.xenby.demo.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginForm {
+public class LoginRequest {
     @NotBlank(message = "Name is required")
     private String username;
 

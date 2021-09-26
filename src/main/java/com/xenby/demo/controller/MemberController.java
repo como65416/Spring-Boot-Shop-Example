@@ -1,7 +1,8 @@
 package com.xenby.demo.controller;
 
+import com.xenby.demo.dto.response.LoginResponse;
 import com.xenby.demo.exception.UnauthorizedException;
-import com.xenby.demo.form.LoginForm;
+import com.xenby.demo.dto.request.LoginRequest;
 import com.xenby.demo.model.TokenUserDetails;
 import com.xenby.demo.model.User;
 import com.xenby.demo.repository.UserRepository;
@@ -33,12 +34,10 @@ public class MemberController {
     })
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value="/login")
-    public Map<String, Object> login(@Valid @RequestBody LoginForm loginForm) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
-
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        User user = userRepository.findByUsername(loginForm.getUsername());
-        if (user == null || !bCryptPasswordEncoder.matches(loginForm.getPassword(), user.getPassword())) {
+        User user = userRepository.findByUsername(request.getUsername());
+        if (user == null || !bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException("Username or Password not validated");
         }
 
@@ -46,14 +45,15 @@ public class MemberController {
         tokenUserDetails.setUsername(user.getUsername());
         tokenUserDetails.setRole(user.getRole());
         tokenUserDetails.setCompanyId(user.getCompanyId());
-        map.put("token", jwtService.generateToken(tokenUserDetails));
 
-        return map;
+        LoginResponse response = new LoginResponse();
+        response.setToken(jwtService.generateToken(tokenUserDetails));
+
+        return response;
     }
 
     @GetMapping(value="/user-info")
-    public Map<String, Object> info()
-    {
+    public Map<String, Object> info() {
         Map<String, Object> map = new HashMap<String, Object>();
         TokenUserDetails tokenUserDetails = (TokenUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         map.put("username", tokenUserDetails.getUsername());
