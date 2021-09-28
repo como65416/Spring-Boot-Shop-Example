@@ -1,11 +1,14 @@
 package com.xenby.demo.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 
 @Table(name = "student")
 @Entity
+@Data
 public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -22,44 +25,4 @@ public class Student implements Serializable {
 
     @Column(name = "birthday", nullable = false)
     private Date birthday;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String toString() {
-      return "Student{id=" + id + 
-        ", name=" + name + 
-        ", age=" + age + 
-        ", birthday=" + birthday + 
-        "}";
-    }
 }

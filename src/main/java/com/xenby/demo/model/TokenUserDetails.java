@@ -1,5 +1,7 @@
 package com.xenby.demo.model;
 
+import lombok.Data;
+
 public class TokenUserDetails extends User {
     private Integer companyId;
 
