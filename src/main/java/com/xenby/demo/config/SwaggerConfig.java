@@ -22,7 +22,7 @@ public class SwaggerConfig {
                 "API description",
                 "API version",
                 "Terms of service Url",
-                new Contact("Contant name", "url", "email"),
+                new Contact("Contact name", "url", "email"),
                 "License of API", "API license URL", Collections.emptyList());
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()

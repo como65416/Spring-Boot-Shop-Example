@@ -4,18 +4,18 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 
-@Table(name = "user")
-@Entity
 @Data
-public class User implements Serializable {
+@Entity
+@Table(name = "account")
+public class Account implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", insertable = false, nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -23,9 +23,10 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "role", nullable = false)
     private String role;
 
-    @Column(name = "companyId", nullable = false)
-    private Integer companyId;
 }

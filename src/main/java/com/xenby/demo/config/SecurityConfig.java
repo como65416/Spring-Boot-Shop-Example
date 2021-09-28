@@ -21,7 +21,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/login");
+        web.ignoring().antMatchers(
+                "/login",
+                "/products"
+        );
     }
 
     @Override
