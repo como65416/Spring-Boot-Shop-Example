@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `account`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `account`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `account` (
+CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(40) NOT NULL,
   `password` varchar(300) NOT NULL,
@@ -33,13 +33,13 @@ CREATE TABLE `account` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `account`
+-- Dumping data for table `user`
 --
 
-LOCK TABLES `account` WRITE;
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'bob','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Bob','User');
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'bob','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Bob','User');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -104,7 +104,7 @@ DROP TABLE IF EXISTS `user_order`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_order` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
   `phone` varchar(20) NOT NULL,
   `address` varchar(60) NOT NULL,
   `total_price` float NOT NULL,

@@ -18,8 +18,8 @@ public class UserOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "account_id", nullable = false)
-    private Long accountId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name = "phone", nullable = false)
     private String phone;

@@ -4,7 +4,7 @@ import com.xenby.demo.dto.data.TokenUserDetail;
 import com.xenby.demo.dto.request.LoginRequest;
 import com.xenby.demo.dto.response.LoginResponse;
 import com.xenby.demo.exception.UnauthorizedException;
-import com.xenby.demo.model.Account;
+import com.xenby.demo.model.User;
 import com.xenby.demo.repository.AccountRepository;
 import com.xenby.demo.service.JwtService;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping(value="/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        Account account = accountRepository.findByUsername(request.getUsername());
+        User account = accountRepository.findByUsername(request.getUsername());
         if (account == null || !bCryptPasswordEncoder.matches(request.getPassword(), account.getPassword())) {
             throw new UnauthorizedException("Username or Password not validated");
         }

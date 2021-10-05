@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "account")
-public class Account implements Serializable {
+@Table(name = "user")
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
