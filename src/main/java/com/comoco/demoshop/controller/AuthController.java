@@ -4,7 +4,7 @@ import com.comoco.demoshop.dto.request.LoginRequest;
 import com.comoco.demoshop.dto.response.LoginResponse;
 import com.comoco.demoshop.exception.UnauthorizedException;
 import com.comoco.demoshop.model.User;
-import com.comoco.demoshop.repository.AccountRepository;
+import com.comoco.demoshop.repository.UserRepository;
 import com.comoco.demoshop.service.JwtService;
 import com.comoco.demoshop.dto.data.TokenUserDetail;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 public class AuthController {
@@ -26,7 +27,7 @@ public class AuthController {
     JwtService jwtService;
 
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
 
     @ApiOperation("登入")
     @ApiResponses({
@@ -37,19 +38,21 @@ public class AuthController {
     @PostMapping(value="/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        User account = accountRepository.findByUsername(request.getUsername());
-        if (account == null || !bCryptPasswordEncoder.matches(request.getPassword(), account.getPassword())) {
+        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
+        if (userOpt.isEmpty() || !bCryptPasswordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
             throw new UnauthorizedException("Username or Password not validated");
         }
 
+        User user = userOpt.get();
         TokenUserDetail tokenUserDetails = TokenUserDetail.builder()
-                .name(account.getName())
-                .accountId(account.getId())
-                .role(account.getRole())
+                .name(user.getName())
+                .accountId(user.getId())
+                .role(user.getRole())
                 .build();
 
-        LoginResponse response = new LoginResponse();
-        response.setToken(jwtService.generateToken(tokenUserDetails));
+        LoginResponse response = LoginResponse.builder()
+                .token(jwtService.generateToken(tokenUserDetails))
+                .build();
 
         return response;
     }
