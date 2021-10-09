@@ -16,33 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(40) NOT NULL,
-  `password` varchar(300) NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `role` varchar(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'bob','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Bob','User');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `order_product`
 --
 
@@ -96,6 +69,36 @@ INSERT INTO `product` VALUES (1,'菜包',20,120,'2021-09-28 23:20:20','2021-09-2
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(40) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT '0',
+  `email` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_username` (`username`),
+  KEY `idx_email` (`email`(30))
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'bob','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Bob.','Member','bob@example.com'),(2,'alice','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Alice','VIPMember','alice@example.com');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user_order`
 --
 
@@ -104,12 +107,13 @@ DROP TABLE IF EXISTS `user_order`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_order` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
+  `account_id` int(11) unsigned NOT NULL,
   `phone` varchar(20) NOT NULL,
   `address` varchar(60) NOT NULL,
   `total_price` float NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `status` enum('unpaid','paid','canceled') NOT NULL DEFAULT 'unpaid',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -132,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-28 23:23:36
+-- Dump completed on 2021-10-09 18:18:12
