@@ -7,6 +7,7 @@ import com.comoco.demoshop.model.User;
 import com.comoco.demoshop.repository.UserRepository;
 import com.comoco.demoshop.service.JwtService;
 import com.comoco.demoshop.dto.data.TokenUserDetail;
+import com.comoco.demoshop.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -27,7 +28,7 @@ public class AuthController {
     JwtService jwtService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @ApiOperation("登入")
     @ApiResponses({
@@ -38,7 +39,7 @@ public class AuthController {
     @PostMapping(value="/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
+        Optional<User> userOpt = userService.findByUsername(request.getUsername());
         if (userOpt.isEmpty() || !bCryptPasswordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
             throw new UnauthorizedException("Username or Password not validated");
         }
