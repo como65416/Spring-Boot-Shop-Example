@@ -1,10 +1,12 @@
 package com.comoco.demoshop.controller;
 
+import com.comoco.demoshop.dto.data.CreateUserData;
 import com.comoco.demoshop.dto.request.LoginRequest;
+import com.comoco.demoshop.dto.request.RegisterRequest;
 import com.comoco.demoshop.dto.response.LoginResponse;
+import com.comoco.demoshop.exception.BadRequestException;
 import com.comoco.demoshop.exception.UnauthorizedException;
 import com.comoco.demoshop.model.User;
-import com.comoco.demoshop.repository.UserRepository;
 import com.comoco.demoshop.service.JwtService;
 import com.comoco.demoshop.dto.data.TokenUserDetail;
 import com.comoco.demoshop.service.UserService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -32,8 +35,8 @@ public class AuthController {
 
     @ApiOperation("登入")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "登入成功"),
-            @ApiResponse(code = 401, message = "登入失敗")
+        @ApiResponse(code = 200, message = "登入成功"),
+        @ApiResponse(code = 401, message = "登入失敗")
     })
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value="/login")
@@ -46,15 +49,41 @@ public class AuthController {
 
         User user = userOpt.get();
         TokenUserDetail tokenUserDetails = TokenUserDetail.builder()
-                .name(user.getName())
-                .accountId(user.getId())
-                .role(user.getRole())
-                .build();
+            .name(user.getName())
+            .accountId(user.getId())
+            .role(user.getRole())
+            .build();
 
         LoginResponse response = LoginResponse.builder()
-                .token(jwtService.generateToken(tokenUserDetails))
-                .build();
+            .token(jwtService.generateToken(tokenUserDetails))
+            .build();
 
         return response;
+    }
+
+    @ApiOperation("註冊")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "登入成功"),
+        @ApiResponse(code = 401, message = "登入失敗")
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping(value="/register")
+    public void register(@Valid @RequestBody RegisterRequest request) throws Exception {
+        Optional<User> user = this.userService.findByUsername(request.getUsername());
+        if (!user.isEmpty()) {
+            throw new BadRequestException("Account exists already");
+        }
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = bCryptPasswordEncoder.encode(request.getPassword());
+
+        this.userService.createUser(
+            CreateUserData.builder()
+                .email(request.getEmail())
+                .name(request.getName())
+                .username(request.getUsername())
+                .password(hashedPassword)
+                .build()
+        );
     }
 }

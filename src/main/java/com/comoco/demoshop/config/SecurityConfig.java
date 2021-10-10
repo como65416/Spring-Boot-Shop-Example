@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
                 "/login",
                 "/products",
+                "/register",
                 // Swagger API Docs
                 "/swagger-ui.html",
                 "/swagger-resources/**",

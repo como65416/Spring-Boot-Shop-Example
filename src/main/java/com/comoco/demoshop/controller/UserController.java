@@ -4,9 +4,7 @@ import com.comoco.demoshop.dto.data.TokenUserDetail;
 import com.comoco.demoshop.dto.request.UpdatePasswordRequest;
 import com.comoco.demoshop.dto.request.UpdateProfileRequest;
 import com.comoco.demoshop.dto.response.ProfileResponse;
-import com.comoco.demoshop.exception.UnauthorizedException;
 import com.comoco.demoshop.model.User;
-import com.comoco.demoshop.repository.UserRepository;
 import com.comoco.demoshop.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -58,7 +56,7 @@ public class UserController {
         Object principal =  auth.getPrincipal();
         Long userId = ((TokenUserDetail) principal).getAccountId();
 
-        this.userService.UpdateProfile(userId, request.getName(), request.getEmail());
+        this.userService.updateProfile(userId, request.getName(), request.getEmail());
     }
 
     @ApiOperation("更改密碼")
@@ -76,6 +74,6 @@ public class UserController {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
-        this.userService.UpdatePassword(userId, hashedPassword);
+        this.userService.updatePassword(userId, hashedPassword);
     }
 }

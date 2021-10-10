@@ -8,8 +8,4 @@ public class UnauthorizedException extends HttpException {
     public UnauthorizedException(String message) {
         super(message);
     }
-
-    public HttpStatus getStatusCode() {
-        return statusCode;
-    }
 }

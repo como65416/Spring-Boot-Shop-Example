@@ -8,8 +8,4 @@ public class ForbiddenException extends HttpException {
     public ForbiddenException(String message) {
         super(message);
     }
-
-    public HttpStatus getStatusCode() {
-        return statusCode;
-    }
 }
