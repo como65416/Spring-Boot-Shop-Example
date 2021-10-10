@@ -1,5 +1,6 @@
 package com.comoco.demoshop.model;
 
+import com.comoco.demoshop.enums.ProductType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,10 @@ public class Product implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductType type;
 
     @Column(name = "price", nullable = false)
     private Float price;

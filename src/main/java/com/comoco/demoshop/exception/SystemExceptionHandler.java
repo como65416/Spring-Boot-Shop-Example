@@ -2,6 +2,7 @@ package com.comoco.demoshop.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,6 +36,12 @@ public class SystemExceptionHandler {
         errors.put("message", ex.getMessage());
 
         return new ResponseEntity<Map<String, String>>(errors, ex.getStatusCode());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleForbiddenExceptions(AccessDeniedException ex) {
+        return handleHttpExceptions(new ForbiddenException(ex.getMessage()));
     }
 }
 
