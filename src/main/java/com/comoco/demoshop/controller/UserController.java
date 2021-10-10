@@ -1,6 +1,7 @@
 package com.comoco.demoshop.controller;
 
 import com.comoco.demoshop.dto.data.TokenUserDetail;
+import com.comoco.demoshop.dto.request.UpdatePasswordRequest;
 import com.comoco.demoshop.dto.request.UpdateProfileRequest;
 import com.comoco.demoshop.dto.response.ProfileResponse;
 import com.comoco.demoshop.exception.UnauthorizedException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,7 +46,6 @@ public class UserController {
         return profileResp;
     }
 
-
     @ApiOperation("更新帳號資訊")
     @ApiResponses({
             @ApiResponse(code = 200, message = "更新成功"),
@@ -58,5 +59,23 @@ public class UserController {
         Long userId = ((TokenUserDetail) principal).getAccountId();
 
         this.userService.UpdateProfile(userId, request.getName(), request.getEmail());
+    }
+
+    @ApiOperation("更改密碼")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "更新成功"),
+            @ApiResponse(code = 401, message = "權限錯誤")
+    })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value="/update-password")
+    public void updatePassword(@Valid @RequestBody UpdatePasswordRequest request) throws Exception {
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        Object principal =  auth.getPrincipal();
+        Long userId = ((TokenUserDetail) principal).getAccountId();
+
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = bCryptPasswordEncoder.encode(request.getPassword());
+
+        this.userService.UpdatePassword(userId, hashedPassword);
     }
 }

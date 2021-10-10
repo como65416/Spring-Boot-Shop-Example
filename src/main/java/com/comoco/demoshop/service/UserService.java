@@ -28,4 +28,11 @@ public class UserService {
         user.setEmail(email);
         this.userRepository.save(user);
     }
+
+    @Transactional
+    public void UpdatePassword(Long userId, String password) {
+        User user = this.userRepository.findByIdForUpdate(userId).get();
+        user.setPassword(password);
+        this.userRepository.save(user);
+    }
 }
