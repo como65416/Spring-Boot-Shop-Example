@@ -6,8 +6,9 @@
 - Validation
 - Transaction
 - JPA 與 Repository
-- JWT 驗證 (Service)
-- 驗證 JWT 是否正確 (Filter)
+- Json Web Token (JWT) 機制
+- API JWT 驗證 (Filter)
+- Role PreAuthorize
 - Swagger UI (http://localhost:8080/swagger-ui.html)
 
 資料庫： [連結](./docs/database.sql)
@@ -26,7 +27,3 @@ build 成 WAR 檔案
 ./gradlew build
 ```
 
----
-
-不完善的地方 :
-- [ ] Swagger 的 Example 目前版本無法正常顯示 (等待 3.0 穩定版再看看)
