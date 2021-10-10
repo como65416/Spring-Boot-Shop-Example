@@ -18,7 +18,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         ApiInfo apiInfo = new ApiInfo(
-                "API title",
+                "Spring Boot Example - Shop",
                 "API description",
                 "API version",
                 "Terms of service Url",
@@ -26,7 +26,7 @@ public class SwaggerConfig {
                 "License of API", "API license URL", Collections.emptyList());
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.comoco.demoshop"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)

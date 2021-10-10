@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -46,9 +45,9 @@ public class UserController {
     }
 
 
-    @ApiOperation("取得基本資料")
+    @ApiOperation("更新帳號資訊")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "取得成功"),
+            @ApiResponse(code = 200, message = "更新成功"),
             @ApiResponse(code = 401, message = "權限錯誤")
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
