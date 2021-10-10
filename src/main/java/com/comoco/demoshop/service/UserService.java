@@ -23,7 +23,7 @@ public class UserService {
 
     @Transactional
     public void UpdateProfile(Long userId, String name, String email) {
-        User user = this.userRepository.findById(userId).get();
+        User user = this.userRepository.findByIdForUpdate(userId).get();
         user.setName(name);
         user.setEmail(email);
         this.userRepository.save(user);
