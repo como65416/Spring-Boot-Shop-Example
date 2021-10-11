@@ -83,10 +83,12 @@ CREATE TABLE `user` (
   `name` varchar(30) NOT NULL,
   `role` enum('Member','VIPMember') NOT NULL DEFAULT 'Member',
   `email` varchar(100) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`),
   KEY `idx_email` (`email`(30))
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +97,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'bob','$2a$10$/E/C4c3aqHE2Gz5.tEEdourYJAcx9tgeB4XViV2XVTSLNjL5JIFYy','Bob','Member','bob@example.com'),(2,'alice','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Alice','VIPMember','alice@example.com'),(7,'jack0001','$2a$10$GWNRgfHcQeLc2bz0gXXCuu2Nv1tQMhgBmvAr9RvSDckXDuzDYjG76','Jack','Member','jack0001@example.com');
+INSERT INTO `user` VALUES (1,'bob','$2a$10$1wJ8fhzM8nzlLZwCLkubAOjwTlmQBzogNjfFApjD4m1MPAafW4M7y','Bob','Member','bob@example.com','2021-06-03 12:35:45','2021-10-11 01:26:02'),(2,'alice','$2a$10$fuFsani0EqZbqq2WDhoV.OEU/jrcQXiQF0wPKwk/2Gz62IvuVn4/i','Alice','VIPMember','alice@example.com','2021-06-03 12:35:45','2021-06-03 12:35:45'),(9,'jack0001','$2a$10$RZW8fYv1BfET/STXTNMIPeAvMw/Phetkv7hydWz.uuUrjC3HpJ6Ra','Jack','Member','jack0001@example.com','2021-10-11 01:25:55','2021-10-11 01:25:55');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-10 23:17:09
+-- Dump completed on 2021-10-11 14:26:42

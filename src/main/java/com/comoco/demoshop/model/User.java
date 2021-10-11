@@ -1,13 +1,18 @@
 package com.comoco.demoshop.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 
 @Data
 @Entity
 @Table(name = "user")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,8 +32,17 @@ public class User implements Serializable {
     private String name;
 
     @Column(name = "role", nullable = false)
+
     private String role;
 
     @Column(name = "email", nullable = true)
     private String email;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = true)
+    private Instant createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = true)
+    private Instant updated_at;
 }
