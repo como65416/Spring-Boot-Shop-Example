@@ -41,9 +41,8 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value="/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        Optional<User> userOpt = userService.findByUsername(request.getUsername());
-        if (userOpt.isEmpty() || !bCryptPasswordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
+        Optional<User> userOpt = this.userService.validatedUserPassword(request.getUsername(), request.getPassword());
+        if (userOpt.isEmpty()) {
             throw new UnauthorizedException("Username or Password not validated");
         }
 
@@ -54,11 +53,9 @@ public class AuthController {
             .role(user.getRole())
             .build();
 
-        LoginResponse response = LoginResponse.builder()
+        return LoginResponse.builder()
             .token(jwtService.generateToken(tokenUserDetails))
             .build();
-
-        return response;
     }
 
     @ApiOperation("註冊")
@@ -74,15 +71,12 @@ public class AuthController {
             throw new BadRequestException("Account exists already");
         }
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = bCryptPasswordEncoder.encode(request.getPassword());
-
         this.userService.createUser(
             CreateUserData.builder()
                 .email(request.getEmail())
                 .name(request.getName())
                 .username(request.getUsername())
-                .password(hashedPassword)
+                .password(request.getPassword())
                 .build()
         );
     }

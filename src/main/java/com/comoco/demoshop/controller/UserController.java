@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -71,9 +70,6 @@ public class UserController {
         Object principal =  auth.getPrincipal();
         Long userId = ((TokenUserDetail) principal).getAccountId();
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = bCryptPasswordEncoder.encode(request.getPassword());
-
-        this.userService.updatePassword(userId, hashedPassword);
+        this.userService.updatePassword(userId, request.getPassword());
     }
 }

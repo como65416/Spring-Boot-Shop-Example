@@ -5,6 +5,7 @@ import com.comoco.demoshop.enums.MemberRole;
 import com.comoco.demoshop.model.User;
 import com.comoco.demoshop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,16 @@ public class UserService {
         return this.userRepository.findByUsername(username);
     }
 
+    public Optional<User> validatedUserPassword(String username, String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        Optional<User> user = this.userRepository.findByUsername(username);
+        if (user.isEmpty() || !bCryptPasswordEncoder.matches(password, user.get().getPassword())) {
+            return Optional.empty();
+        }
+
+        return user;
+    }
+
     @Transactional
     public void updateProfile(Long userId, String name, String email) {
         User user = this.userRepository.findByIdForUpdate(userId).get();
@@ -33,19 +44,25 @@ public class UserService {
 
     @Transactional
     public void updatePassword(Long userId, String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = bCryptPasswordEncoder.encode(password);
+
         User user = this.userRepository.findByIdForUpdate(userId).get();
-        user.setPassword(password);
+        user.setPassword(hashedPassword);
         this.userRepository.save(user);
     }
 
     @Transactional
     public void createUser(CreateUserData data) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = bCryptPasswordEncoder.encode(data.getPassword());
+
         User user = new User();
         user.setUsername(data.getUsername());
-        user.setPassword(data.getPassword());
+        user.setPassword(hashedPassword);
         user.setName(data.getName());
         user.setEmail(data.getEmail());
-        user.setRole(MemberRole.Member.toString());
+        user.setRole(MemberRole.Member.name());
         this.userRepository.save(user);
     }
 }
